@@ -4,6 +4,10 @@ A Flutter plugin for implementing Stripe Identity Verification in your Flutter a
 
 [![pub package](https://img.shields.io/pub/v/stripe_identity_plugin.svg)](https://pub.dev/packages/stripe_identity_plugin)
 
+## Demo
+
+https://github.com/user-attachments/assets/c43a1a81-7a14-4417-8048-be689d196a0e
+
 ## Getting Started
 You can go to [Stripe Identity Website](https://stripe.com/identity) for more information on how to get started.
 This package is not endorsed by Stripe, but it is written to work seamlessly for you. For more information on how this package works for Android, iOS and other platforms, check out [Stripe Identity Documentation](https://docs.stripe.com/identity).
@@ -71,11 +75,6 @@ Possible verification results:
 - `canceled`: User canceled the verification or didn't complete the process
 - `failed`: Verification failed (includes error message)
 - `unknown`: Unexpected error occurred
-
-## Demo
-
-https://github.com/user-attachments/assets/c43a1a81-7a14-4417-8048-be689d196a0e
-
 
 ## Requirements
 
