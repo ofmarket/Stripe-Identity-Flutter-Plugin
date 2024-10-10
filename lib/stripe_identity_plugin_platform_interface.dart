@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'stripe_identity_plugin_method_channel.dart';

@@ -1,4 +1,3 @@
-
 class StripeIdentityException implements Exception {
   final String code;
   final String? message;

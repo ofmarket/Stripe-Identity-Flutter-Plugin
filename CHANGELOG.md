@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+* Fixed plugin class name for use
+* Added screen record for reference purposes
+
 ## 1.0.0
 
 * Initial release of the Stripe Identity Plugin

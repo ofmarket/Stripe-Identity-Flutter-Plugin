@@ -1,4 +1,3 @@
-
 enum VerificationResult {
   completed,
   canceled,

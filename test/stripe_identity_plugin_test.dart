@@ -7,9 +7,9 @@ import 'package:stripe_identity_plugin/stripe_identity_plugin_platform_interface
 class MockIdentityPlatform
     with MockPlatformInterfaceMixin
     implements IdentityPlatform {
-
   @override
-  Future<String> startVerification({required String id, required String key, String? brandLogoUrl}) {
+  Future<String> startVerification(
+      {required String id, required String key, String? brandLogoUrl}) {
     // TODO: implement startVerification
     throw UnimplementedError();
   }
@@ -26,6 +26,5 @@ void main() {
     StripeIdentityPlugin identityPlugin = StripeIdentityPlugin();
     MockIdentityPlatform fakePlatform = MockIdentityPlatform();
     IdentityPlatform.instance = fakePlatform;
-
   });
 }

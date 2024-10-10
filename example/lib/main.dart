@@ -37,10 +37,8 @@ class _MyAppState extends State<MyApp> {
 
                   //* Call the identity plugin
                   final response = await _identityPlugin.startVerification(
-                      id:
-                         dotenv.env['VERIFICATION_ID']!,
-                      key:
-                          dotenv.env['VERIFICATION_KEY']!,
+                      id: dotenv.env['VERIFICATION_ID']!,
+                      key: dotenv.env['VERIFICATION_KEY']!,
                       brandLogoUrl:
                           "https://img.icons8.com/?size=128&id=77153&format=png");
 

@@ -6,9 +6,14 @@ A Flutter plugin for implementing Stripe Identity Verification in your Flutter a
 
 ## Demo
 
-https://github.com/user-attachments/assets/c43a1a81-7a14-4417-8048-be689d196a0e
+**Tests in Debug Mode**
+If you provide a correct verification session and ephermal secret key:
+<https://github.com/user-attachments/assets/c43a1a81-7a14-4417-8048-be689d196a0e>
+
+Otherwise, you get this screen instead:
 
 ## Getting Started
+
 You can go to [Stripe Identity Website](https://stripe.com/identity) for more information on how to get started.
 This package is not endorsed by Stripe, but it is written to work seamlessly for you. For more information on how this package works for Android, iOS and other platforms, check out [Stripe Identity Documentation](https://docs.stripe.com/identity).
 
@@ -26,7 +31,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  stripe_identity_plugin: ^1.0.0
+  stripe_identity_plugin: ^1.0.1
 ```
 
 ## Usage
