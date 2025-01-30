@@ -16,7 +16,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 /**
  * A Flutter plugin for Stripe Identity verification.
  */
-class StripeIdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+class IdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     /**
      * The Flutter method channel used to communicate with the Flutter application.
      */
