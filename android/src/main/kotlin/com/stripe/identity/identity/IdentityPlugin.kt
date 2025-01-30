@@ -98,10 +98,16 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
     }
 
     val activity = activity
-    if (activity !is FragmentActivity) { // ✅ Ensure it's FragmentActivity
+    if (activity !is FragmentActivity) {
         result.error("NO_ACTIVITY", "Plugin requires a FragmentActivity.", null)
         return
     }
+
+    // Convert brandLogoUrl to Uri, or use a default valid Uri
+    val brandLogoUri: Uri = if (!brandLogoUrl.isNullOrEmpty()) Uri.parse(brandLogoUrl) 
+                             else Uri.parse("https://your-default-logo-url.com/logo.png") // Replace with actual logo URL
+
+    val configuration = IdentityVerificationSheet.Configuration(brandLogo = brandLogoUri)
 
     activity.runOnUiThread {
         identityVerificationSheet?.present(
@@ -110,6 +116,7 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
         )
     }
 }
+
 
 
     /**
@@ -159,13 +166,17 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
      *
      * @param binding The activity plugin binding.
      */
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
-    if (activity is FragmentActivity) { // ✅ Use FragmentActivity
+    if (activity is FragmentActivity) {
         val fragmentActivity = activity as FragmentActivity
+
+        // Use a default valid Uri if brandLogoUrl is null
+        val defaultBrandLogoUri: Uri = Uri.parse("https://your-default-logo-url.com/logo.png") 
+
         identityVerificationSheet = IdentityVerificationSheet.create(
             fragmentActivity,
-            IdentityVerificationSheet.Configuration(brandLogo = null) // Add brandLogo to avoid error
+            IdentityVerificationSheet.Configuration(brandLogo = defaultBrandLogoUri) 
         ) { verificationFlowResult ->
             // Handle the verification result
         }
@@ -173,6 +184,7 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
         Log.e("StripeIdentityPlugin", "Activity is not a FragmentActivity")
     }
 }
+
 
     /**
      * Called when the activity is detached due to configuration changes.
