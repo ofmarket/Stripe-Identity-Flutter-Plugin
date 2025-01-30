@@ -3,11 +3,11 @@
 
     <application
         android:allowBackup="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"> <!-- ✅ Add a compatible theme -->
-        
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"> 
+
         <activity
             android:name="com.stripe.android.identity.IdentityActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"> <!-- ✅ Explicitly set AppCompat theme -->
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         </activity>
 
     </application>
