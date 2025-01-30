@@ -14,6 +14,8 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import android.util.Log
+import androidx.activity.ComponentActivity
+
 
 /**
  * A Flutter plugin for Stripe Identity verification.
@@ -96,8 +98,8 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
     }
 
     val activity = activity
-    if (activity !is ComponentActivity) {
-        result.error("NO_ACTIVITY", "Plugin requires a ComponentActivity.", null)
+    if (activity !is FragmentActivity) { // ✅ Ensure it's FragmentActivity
+        result.error("NO_ACTIVITY", "Plugin requires a FragmentActivity.", null)
         return
     }
 
@@ -108,7 +110,6 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
         )
     }
 }
-
 
 
     /**
@@ -160,16 +161,16 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
      */
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
-    if (activity is ComponentActivity) {
-        val componentActivity = activity as ComponentActivity
+    if (activity is FragmentActivity) { // ✅ Use FragmentActivity
+        val fragmentActivity = activity as FragmentActivity
         identityVerificationSheet = IdentityVerificationSheet.create(
-            componentActivity,
-            IdentityVerificationSheet.Configuration()
+            fragmentActivity,
+            IdentityVerificationSheet.Configuration(brandLogo = null) // Add brandLogo to avoid error
         ) { verificationFlowResult ->
             // Handle the verification result
         }
     } else {
-        Log.e("StripeIdentityPlugin", "Activity is not a ComponentActivity")
+        Log.e("StripeIdentityPlugin", "Activity is not a FragmentActivity")
     }
 }
 
