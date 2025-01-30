@@ -27,7 +27,7 @@ flutter:
     platforms:
       android:
         package: com.stripe.identity.identity
-        pluginClass: IdentityPlugin
+        pluginClass: StripeIdentityPlugin
       ios:
         pluginClass: IdentityPlugin
 
