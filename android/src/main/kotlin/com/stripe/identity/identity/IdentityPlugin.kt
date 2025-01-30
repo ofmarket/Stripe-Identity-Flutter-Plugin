@@ -1,5 +1,6 @@
 package com.stripe.identity.identity
 
+
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
@@ -12,6 +13,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import android.util.Log
 
 /**
  * A Flutter plugin for Stripe Identity verification.
@@ -35,7 +37,7 @@ class IdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     /**
      * The IdentityVerificationSheet instance.
      */
-    private lateinit var identityVerificationSheet: IdentityVerificationSheet
+    private var identityVerificationSheet: IdentityVerificationSheet? = null
 
     /**
      * Called when the plugin is attached to the Flutter engine.
@@ -87,25 +89,26 @@ class IdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
      * @param brandLogoUrl The URL of the brand logo to display.
      * @param result A closure to return the result of the verification flow to Flutter.
      */
-    private fun startVerification(id: String, key: String, brandLogoUrl: String?, result: Result) {
-    if (!this::identityVerificationSheet.isInitialized) {
+private fun startVerification(id: String, key: String, brandLogoUrl: String?, result: Result) {
+    if (identityVerificationSheet == null) {
         result.error("NO_SHEET", "IdentityVerificationSheet not initialized.", null)
         return
     }
 
     val activity = activity
-    if (activity !is FragmentActivity) {
-        result.error("NO_ACTIVITY", "Plugin requires a FragmentActivity.", null)
+    if (activity !is ComponentActivity) {
+        result.error("NO_ACTIVITY", "Plugin requires a ComponentActivity.", null)
         return
     }
 
     activity.runOnUiThread {
-        identityVerificationSheet.present(
+        identityVerificationSheet?.present(
             verificationSessionId = id,
             ephemeralKeySecret = key
         )
     }
 }
+
 
 
     /**
@@ -156,16 +159,19 @@ class IdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
      * @param binding The activity plugin binding.
      */
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
-        if (activity is FragmentActivity) {
-        val fragmentActivity = activity as FragmentActivity
-        identityVerificationSheet = IdentityVerificationSheet.create(fragmentActivity) { verificationFlowResult ->
+    activity = binding.activity
+    if (activity is ComponentActivity) {
+        val componentActivity = activity as ComponentActivity
+        identityVerificationSheet = IdentityVerificationSheet.create(
+            componentActivity,
+            IdentityVerificationSheet.Configuration()
+        ) { verificationFlowResult ->
             // Handle the verification result
         }
     } else {
-        Log.e("StripeIdentityPlugin", "Activity is not a FragmentActivity")
+        Log.e("StripeIdentityPlugin", "Activity is not a ComponentActivity")
     }
-    }
+}
 
     /**
      * Called when the activity is detached due to configuration changes.
