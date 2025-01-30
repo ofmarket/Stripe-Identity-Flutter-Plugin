@@ -35,7 +35,7 @@ class IdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     /**
      * The IdentityVerificationSheet instance.
      */
-    private var identityVerificationSheet: IdentityVerificationSheet? = null
+    private lateinit var identityVerificationSheet: IdentityVerificationSheet
 
     /**
      * Called when the plugin is attached to the Flutter engine.
@@ -88,39 +88,25 @@ class IdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
      * @param result A closure to return the result of the verification flow to Flutter.
      */
     private fun startVerification(id: String, key: String, brandLogoUrl: String?, result: Result) {
-        // Get the current activity.
-        val activity = activity
-        // Check if the activity is a FragmentActivity.
-        if (activity !is FragmentActivity) {
-            // Return an error if the activity is not a FragmentActivity.
-            result.error("NO_ACTIVITY", "Plugin requires a FragmentActivity.", null)
-            return
-        }
-
-        // Create a configuration for the IdentityVerificationSheet.
-        val configuration =
-            IdentityVerificationSheet.Configuration(
-                // Set the brand logo from the provided URL.
-                brandLogo = brandLogoUrl?.let { Uri.parse(it) } ?: Uri.EMPTY
-            )
-
-        // Create an instance of the IdentityVerificationSheet.
-        identityVerificationSheet =
-            IdentityVerificationSheet.create(activity, configuration) { verificationFlowResult ->
-                // Handle the verification result.
-                handleVerificationResult(verificationFlowResult, result)
-            }
-
-        // Present the verification sheet on the UI thread.
-        activity.runOnUiThread {
-            identityVerificationSheet?.present(
-                // Set the verification session ID.
-                verificationSessionId = id,
-                // Set the ephemeral key secret.
-                ephemeralKeySecret = key
-            )
-        }
+    if (!this::identityVerificationSheet.isInitialized) {
+        result.error("NO_SHEET", "IdentityVerificationSheet not initialized.", null)
+        return
     }
+
+    val activity = activity
+    if (activity !is FragmentActivity) {
+        result.error("NO_ACTIVITY", "Plugin requires a FragmentActivity.", null)
+        return
+    }
+
+    activity.runOnUiThread {
+        identityVerificationSheet.present(
+            verificationSessionId = id,
+            ephemeralKeySecret = key
+        )
+    }
+}
+
 
     /**
      * Handles the verification result from the IdentityVerificationSheet.
@@ -171,6 +157,14 @@ class IdentityPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
      */
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
+        if (activity is FragmentActivity) {
+        val fragmentActivity = activity as FragmentActivity
+        identityVerificationSheet = IdentityVerificationSheet.create(fragmentActivity) { verificationFlowResult ->
+            // Handle the verification result
+        }
+    } else {
+        Log.e("StripeIdentityPlugin", "Activity is not a FragmentActivity")
+    }
     }
 
     /**
