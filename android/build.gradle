@@ -52,8 +52,12 @@ android {
     dependencies {
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.mockito:mockito-core:5.0.0")
-        implementation('com.stripe:identity:20.48.2') {
-            exclude group: 'com.stripe', module: 'ml-core-default'
+    implementation('com.stripe:identity:20.48.2') {
+        exclude group: 'com.stripe', module: 'ml-core-default'
+    }
+
+    // ✅ Explicitly add the correct ML Core dependency
+    implementation 'com.stripe:ml-core:20.48.2'
     }
     }
 
