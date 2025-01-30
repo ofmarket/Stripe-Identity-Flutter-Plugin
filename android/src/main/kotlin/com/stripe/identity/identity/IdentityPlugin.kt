@@ -103,9 +103,7 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
         return
     }
 
-    // Convert brandLogoUrl to Uri, or use a default valid Uri
-    val brandLogoUri: Uri = if (!brandLogoUrl.isNullOrEmpty()) Uri.parse(brandLogoUrl) 
-                             else Uri.parse("https://your-default-logo-url.com/logo.png") // Replace with actual logo URL
+    val brandLogoUri: Uri? = brandLogoUrl?.takeIf { it.isNotEmpty() }?.let { Uri.parse(it) }
 
     val configuration = IdentityVerificationSheet.Configuration(brandLogo = brandLogoUri)
 
@@ -166,24 +164,22 @@ private fun startVerification(id: String, key: String, brandLogoUrl: String?, re
      *
      * @param binding The activity plugin binding.
      */
-override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    activity = binding.activity
-    if (activity is FragmentActivity) {
-        val fragmentActivity = activity as FragmentActivity
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity
+        if (activity is FragmentActivity) {
+            val fragmentActivity = activity as FragmentActivity
 
-        // Use a default valid Uri if brandLogoUrl is null
-        val defaultBrandLogoUri: Uri = Uri.parse("https://your-default-logo-url.com/logo.png") 
-
-        identityVerificationSheet = IdentityVerificationSheet.create(
-            fragmentActivity,
-            IdentityVerificationSheet.Configuration(brandLogo = defaultBrandLogoUri) 
-        ) { verificationFlowResult ->
-            // Handle the verification result
+            identityVerificationSheet = IdentityVerificationSheet.create(
+                fragmentActivity,
+                IdentityVerificationSheet.Configuration(brandLogo = null) // Allows null brand logo
+            ) { verificationFlowResult ->
+                handleVerificationResult(verificationFlowResult)
+            }
+        } else {
+            Log.e("StripeIdentityPlugin", "Activity is not a FragmentActivity")
         }
-    } else {
-        Log.e("StripeIdentityPlugin", "Activity is not a FragmentActivity")
     }
-}
+
 
 
     /**
